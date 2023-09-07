@@ -3,21 +3,20 @@ using SFML.Graphics;
 
 namespace Framp
 {
-    class Initial
+    internal class StartPoint
     {
         private static void Main()
         {
             var renderWindow = WindowWrapper.RenderWindow;
 
-            EntityMaster entityMaster = new(new List<Entity>());
-            entityMaster.AddEntity(new TestEntity());
+            EntityMaster.AddEntity(new TestEntity());
             
             while (renderWindow.IsOpen)
             {
                 renderWindow.DispatchEvents();
                 renderWindow.Clear(Color.Black);
                 
-                entityMaster.UpdateEntities();
+                EntityMaster.UpdateEntities();
                 
                 renderWindow.Display();
             }

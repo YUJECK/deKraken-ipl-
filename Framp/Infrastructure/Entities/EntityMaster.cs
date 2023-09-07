@@ -1,35 +1,30 @@
 ﻿namespace Framp;
 
-public sealed class EntityMaster
+public static class EntityMaster
 {
-    private readonly List<Entity> _entities;
+    private static readonly List<Entity> Entities = new();
 
-    public EntityMaster(List<Entity> entities)
-    {
-        _entities = entities;
-    }
-
-    public void AddEntity(Entity entity)
+    public static void AddEntity(Entity entity)
     {
         if (entity == null)
             throw new NullReferenceException("Null entity added");
 
-        _entities.Add(entity);
+        Entities.Add(entity);
         entity.OnCreated();
     }
 
-    public void DestroyEntity(Entity entity)
+    public static void DestroyEntity(Entity entity)
     {
         if (entity == null)
             throw new NullReferenceException("Null entity removed");
         
-        _entities.Remove(entity);
+        Entities.Remove(entity);
         entity.OnDestroyed();
     }
 
-    public void UpdateEntities()
+    public static void UpdateEntities()
     {
-        foreach (var entity in _entities)
+        foreach (var entity in Entities)
         {
             entity.OnUpdate();
             entity.ComponentsMaster.UpdateAll();
