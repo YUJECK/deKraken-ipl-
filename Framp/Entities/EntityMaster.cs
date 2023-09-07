@@ -32,6 +32,7 @@ public sealed class EntityMaster
         foreach (var entity in _entities)
         {
             entity.OnUpdate();
+            entity.ComponentsMaster.UpdateAll();
         }
     }
 }

@@ -8,6 +8,18 @@ public sealed class ComponentsMaster
 
     public ComponentsMaster(Entity owner)
         => Owner = owner;
+
+    public TComponent Get<TComponent>()
+        where TComponent : Component
+    {
+        return _components[typeof(TComponent)] as TComponent;
+    }
+
+    public void UpdateAll()
+    {
+        foreach (var component in _components)
+            component.Value.Update();
+    }
     
     public void Add<TComponent>(TComponent component)
         where TComponent : Component

@@ -8,7 +8,7 @@ namespace Framp
     {
         private static void Main()
         {
-            RenderWindow renderWindow = new(new VideoMode(250, 250), "Framp", Styles.Default);
+            var renderWindow = WindowWrapper.RenderWindow;
 
             EntityMaster entityMaster = new(new List<Entity>());
             entityMaster.AddEntity(new TestEntity());
