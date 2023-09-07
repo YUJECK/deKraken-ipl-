@@ -23,4 +23,16 @@ public sealed class Locality : Component
         Transformable.Scale = scale;
         Transformable.Rotation = rotation;
     }
+
+    public void Move(float x, float y)
+        => Transformable.Position = new Vector2f(x, y);
+    
+    public void Move(Vector2f toPos)
+        => Transformable.Position = toPos;
+    
+    public void Rotate(float toAngel)
+        => Transformable.Rotation = toAngel;
+    
+    public void Scale(Vector2f toScale)
+        => Transformable.Scale = toScale;
 }

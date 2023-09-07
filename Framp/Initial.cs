@@ -1,6 +1,5 @@
 ﻿using Framp.Tests;
 using SFML.Graphics;
-using SFML.Window;
 
 namespace Framp
 {
