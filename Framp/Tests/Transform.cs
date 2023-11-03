@@ -3,11 +3,11 @@ using SFML.System;
 
 namespace Framp.Tests;
 
-public sealed class Locality : Component
+public sealed class Transform : Component
 {
     public readonly Transformable Transformable;
 
-    public Locality(Vector2f position, Vector2f scale)
+    public Transform(Vector2f position, Vector2f scale)
     {
         Transformable = new Transformable();
         
@@ -15,7 +15,7 @@ public sealed class Locality : Component
         Transformable.Scale = scale;
     }
     
-    public Locality(Vector2f position, Vector2f scale, float rotation)
+    public Transform(Vector2f position, Vector2f scale, float rotation)
     {
         Transformable = new Transformable();
         

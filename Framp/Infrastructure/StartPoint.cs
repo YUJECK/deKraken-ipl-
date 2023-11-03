@@ -1,24 +1,26 @@
 ﻿using Framp.Tests;
+using Framp.Windows;
 using SFML.Graphics;
 
 namespace Framp
 {
-    internal class StartPoint
+    internal static class StartPoint
     {
         private static void Main()
         {
-            var renderWindow = WindowWrapper.RenderWindow;
-
             EntityMaster.AddEntity(new TestEntity());
+            EntityMaster.AddEntity(new StaticSprite());
             
-            while (renderWindow.IsOpen)
+            WindowWrapper.SetCamera(new Camera());
+            
+            while (WindowWrapper.RenderWindow.IsOpen)
             {
-                renderWindow.DispatchEvents();
-                renderWindow.Clear(Color.Black);
+                WindowWrapper.RenderWindow.DispatchEvents();
+                WindowWrapper.RenderWindow.Clear(Color.Blue);
                 
                 EntityMaster.UpdateEntities();
                 
-                renderWindow.Display();
+                WindowWrapper.RenderWindow.Display();
             }
         }
     }

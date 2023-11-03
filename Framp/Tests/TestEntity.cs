@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using Framp.Windows;
+using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 
@@ -11,10 +12,10 @@ public sealed class TestEntity : Entity
 
     public override void OnCreated()
     {
-        ComponentsMaster.Add(new Locality(new Vector2f(300, 300), new Vector2f(1, 1)));
+        ComponentsMaster.Add(new Transform(new Vector2f(0, 0), new Vector2f(1, 1)));
 
         Texture texture 
-            = new(PathsHelper.Assets + "testTexture.jpg");
+            = new(PathsHelper.Assets + "Square.png");
         
         ComponentsMaster.Add(new SpriteRenderer(texture));
     }
@@ -24,21 +25,24 @@ public sealed class TestEntity : Entity
         _currentPos.X += _currentPosX;
         _currentPos.Y += _currentPosX;
 
-        if (_currentPos.X > 500)
+        if (_currentPos.X > 200 || _currentPos.Y > 200)
         {
+            Console.WriteLine(_currentPos);
+            Console.WriteLine(WindowWrapper.WindowSize());
+            
             _currentPos.X = 0f;
             _currentPos.Y = 0f;
         }
         
         if (_currentPos.X < 0)
         {
-            _currentPos.X = 499;
-            _currentPos.Y = 499;
+            _currentPos.X = 200;
+            _currentPos.Y = 200;
         }
 
         if (InputSystem.IsKeyPressed(Keyboard.Key.Space))
             _currentPosX *= -1;
         
-        ComponentsMaster.Get<Locality>().Move(_currentPos);
+        ComponentsMaster.Get<Transform>().Move(_currentPos);
     }
 }
