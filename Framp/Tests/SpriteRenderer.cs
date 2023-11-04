@@ -3,12 +3,14 @@ using SFML.Graphics;
 
 namespace Framp.Tests;
 
-public sealed class SpriteRenderer : Component
+public sealed class SpriteRenderer : Component, IToDraw
 {
     private Sprite _sprite;
 
     private Transform _transform;
     private Texture _texture;
+
+    public Drawable ToDraw => _sprite;
 
     public SpriteRenderer(Texture texture)
     {
@@ -33,7 +35,5 @@ public sealed class SpriteRenderer : Component
         _sprite.Scale = _transform.Transformable.Scale;
         _sprite.Rotation = _transform.Transformable.Rotation;
         _sprite.Position = _transform.Transformable.Position;
-        
-        _sprite.Draw(WindowWrapper.RenderWindow, RenderStates.Default); 
     }
 }

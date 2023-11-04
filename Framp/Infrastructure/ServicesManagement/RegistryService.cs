@@ -5,10 +5,10 @@ using Framp.InputSystem;
 
 namespace Framp.Infrastructure.ServicesManagement;
 
-public class ServicesRegistry
+public class RegistryService : ITickable
 {
     private readonly Dictionary<Type, object> _allServices = new();
-    private readonly List<ITickableService> _tickableServices = new();
+    private readonly List<ITickable> _tickableServices = new();
 
     public void RegisterService<TService>(TService service)
     {
@@ -20,7 +20,7 @@ public class ServicesRegistry
         
         _allServices.Add(typeof(TService), service);
         
-        if(service is ITickableService tickableService)
+        if(service is ITickable tickableService)
             _tickableServices.Add(tickableService);
     }
     
@@ -56,7 +56,7 @@ public class ServicesRegistry
         return _allServices[type];
     }
     
-    public void TickAll()
+    public void Tick()
     {
         foreach (var service in _tickableServices)
         {

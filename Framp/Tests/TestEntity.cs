@@ -17,6 +17,8 @@ public sealed class TestEntity : Entity
     private void Construct(InputService inputService)
     {
         _inputService = inputService;
+
+        ComponentsMaster.FindByBaseClass<IToDraw>();
     }
     
     public override void OnCreated()
@@ -36,9 +38,6 @@ public sealed class TestEntity : Entity
 
         if (_currentPos.X > 200 || _currentPos.Y > 200)
         {
-            Console.WriteLine(_currentPos);
-            Console.WriteLine(WindowWrapper.WindowSize());
-            
             _currentPos.X = 0f;
             _currentPos.Y = 0f;
         }

@@ -13,27 +13,17 @@ namespace Framp
         private static void Main()
         {
             InputService service = new();
+            RegistryService registryService = new();
+            GameLoop gameLoop = new(registryService);
 
-            ServicesRegistry servicesRegistry = new();
-            servicesRegistry.RegisterService(service);
-            
-            EntityMaster.SetContainer(servicesRegistry);
-            
+            registryService.RegisterService(service);
+
+            EntityMaster.SetContainer(registryService);
+
             EntityMaster.AddEntity(new TestEntity());
             EntityMaster.AddEntity(new StaticSprite());
             
-            WindowWrapper.SetCamera(new Camera());
-            
-            while (WindowWrapper.RenderWindow.IsOpen)
-            {
-                WindowWrapper.RenderWindow.DispatchEvents();
-                WindowWrapper.RenderWindow.Clear(Color.Blue);
-                
-                EntityMaster.UpdateEntities();
-                servicesRegistry.TickAll();
-                
-                WindowWrapper.RenderWindow.Display();
-            }
+            gameLoop.StartLoop();
         }
     }
 }

@@ -1,6 +1,6 @@
 namespace Framp.InputSystem;
 
-public interface ITickableService
+public interface ITickable
 {
     void Tick();
 }

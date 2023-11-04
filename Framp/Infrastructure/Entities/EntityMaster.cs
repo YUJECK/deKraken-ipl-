@@ -5,22 +5,26 @@ namespace Framp;
 public static class EntityMaster
 {
     private static readonly List<Entity> Entities = new();
-    private static ServicesRegistry _registry;
+    private static RegistryService _registryService;
+
+    public static event Action<Entity> OnAdded;
     
-    public static void SetContainer(ServicesRegistry servicesRegistry)
+    public static void SetContainer(RegistryService registryService)
     {
-        _registry = servicesRegistry;
+        _registryService = registryService;
     }
     
     public static void AddEntity(Entity entity)
     {
         if (entity == null)
-            throw new NullReferenceException("Null entity added");
+            Console.WriteLine("! You tried to spawn null entity");
 
         Entities.Add(entity);
-        _registry.Inject(entity);
-        
+        _registryService.Inject(entity);
+
         entity.OnCreated();
+        
+        OnAdded?.Invoke(entity);
     }
 
     public static void DestroyEntity(Entity entity)

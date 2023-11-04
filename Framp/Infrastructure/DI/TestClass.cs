@@ -6,9 +6,9 @@ namespace Framp.DI;
 public class TestClass
 {
     [Inject]
-    public void INJECT(TestEntity entity, ServicesRegistry registry)
+    public void INJECT(TestEntity entity, RegistryService registryService)
     {
-        Console.WriteLine(entity.GetType().ToString() + registry.GetType().ToString());
+        Console.WriteLine(entity.GetType().ToString() + registryService.GetType().ToString());
         
     }
     

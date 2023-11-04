@@ -4,7 +4,7 @@ public sealed class ComponentsMaster
 {
     public readonly Entity Owner;
     
-    private Dictionary<Type, Component> _components = new();
+    private readonly Dictionary<Type, Component> _components = new();
 
     public ComponentsMaster(Entity owner)
         => Owner = owner;
@@ -15,6 +15,18 @@ public sealed class ComponentsMaster
         return _components[typeof(TComponent)] as TComponent;
     }
 
+    public TClass FindByBaseClass<TClass>()
+        where TClass : class
+    {
+        foreach (var componentPair in _components)
+        {
+            if (componentPair.Value is TClass asInterface)
+                return asInterface;
+        }
+
+        return null;
+    }
+    
     public void UpdateAll()
     {
         foreach (var component in _components)

@@ -2,7 +2,7 @@
 
 namespace Framp.InputSystem;
 
-public class InputService : ITickableService
+public class InputService : ITickable
 {
     private static readonly Dictionary<int, int> KeysState = new();
 
