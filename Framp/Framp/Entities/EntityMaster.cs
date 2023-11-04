@@ -1,17 +1,18 @@
-﻿using Framp.Infrastructure.ServicesManagement;
+﻿using Framp.DI;
+using Framp.Infrastructure.ServicesManagement;
 
 namespace Framp;
 
 public static class EntityMaster
 {
     private static readonly List<Entity> Entities = new();
-    private static RegistryService _registryService;
+    private static Injector _injector;
 
     public static event Action<Entity> OnAdded;
     
-    public static void SetContainer(RegistryService registryService)
+    public static void SetContainer(Injector injector)
     {
-        _registryService = registryService;
+        _injector = injector;
     }
     
     public static void SpawnEntity(Entity entity)
@@ -22,7 +23,7 @@ public static class EntityMaster
         }
 
         Entities.Add(entity);
-        _registryService.Inject(entity);
+        _injector.Inject(entity);
 
         entity.OnCreated();
         

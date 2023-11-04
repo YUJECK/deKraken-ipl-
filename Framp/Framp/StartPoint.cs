@@ -18,8 +18,6 @@ namespace Framp
 
             registryService.RegisterService(service);
 
-            EntityMaster.SetContainer(registryService);
-
             EntityMaster.SpawnEntity(new TestEntity());
             EntityMaster.SpawnEntity(new StaticSprite());
             

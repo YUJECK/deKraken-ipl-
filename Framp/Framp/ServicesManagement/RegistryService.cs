@@ -10,6 +10,8 @@ public class RegistryService : ITickable
     private readonly Dictionary<Type, object> _allServices = new();
     private readonly List<ITickable> _tickableServices = new();
 
+    private Injector _injector;
+    
     public void RegisterService<TService>(TService service)
     {
         if (service == null)
@@ -22,38 +24,20 @@ public class RegistryService : ITickable
         
         if(service is ITickable tickableService)
             _tickableServices.Add(tickableService);
-    }
-    
-    public void Inject(object toInject)
-    {
-        var type = toInject.GetType();
 
-        var allMethods = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        _injector = new(this);
         
-        foreach (var info in allMethods)
-        {
-            foreach (var attribute in info.GetCustomAttributes())
-            {
-                if (attribute is InjectAttribute)
-                {
-                    var parameters = new List<object>();
-                    
-                    foreach (var parameter in info.GetParameters())
-                    {
-                        parameters.Add(Get(parameter.ParameterType));
-                    }
-
-                    type
-                        .GetMethod(info.Name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                        .Invoke(toInject, parameters.ToArray());
-                }
-            }
-        }
+        EntityMaster.SetContainer(_injector);
     }
     
-    private object Get(Type type)
+    public object Get(Type type)
     {
         return _allServices[type];
+    }
+    public TService Get<TService>()
+        where TService : class
+    {
+        return _allServices[typeof(TService)] as TService;
     }
     
     public void Tick()
