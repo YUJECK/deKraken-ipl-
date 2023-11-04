@@ -1,4 +1,5 @@
-﻿using Framp.Tests;
+﻿using Framp.InputSystem;
+using Framp.Tests;
 using Framp.Windows;
 using SFML.Graphics;
 
@@ -12,6 +13,8 @@ namespace Framp
             EntityMaster.AddEntity(new StaticSprite());
             
             WindowWrapper.SetCamera(new Camera());
+
+            InputService service = new();
             
             while (WindowWrapper.RenderWindow.IsOpen)
             {
@@ -19,6 +22,7 @@ namespace Framp
                 WindowWrapper.RenderWindow.Clear(Color.Blue);
                 
                 EntityMaster.UpdateEntities();
+                service.Tick();
                 
                 WindowWrapper.RenderWindow.Display();
             }

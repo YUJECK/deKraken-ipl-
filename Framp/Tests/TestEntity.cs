@@ -1,4 +1,5 @@
-﻿using Framp.Windows;
+﻿using Framp.InputSystem;
+using Framp.Windows;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -40,7 +41,7 @@ public sealed class TestEntity : Entity
             _currentPos.Y = 200;
         }
 
-        if (InputSystem.IsKeyPressed(Keyboard.Key.Space))
+        if (InputService.IsKeyUp(Keyboard.Key.Space))
             _currentPosX *= -1;
         
         ComponentsMaster.Get<Transform>().Move(_currentPos);
