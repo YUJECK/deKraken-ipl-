@@ -14,17 +14,17 @@ public class InputService : ITickableService
         }
     }
 
-    public static bool IsKeyPressed(Keyboard.Key key)
+    public bool IsKeyPressed(Keyboard.Key key)
     {
         return Keyboard.IsKeyPressed(key);
     }
     
-    public static bool IsKeyDown(Keyboard.Key key)
+    public bool IsKeyDown(Keyboard.Key key)
     {
         return KeysState[(int)key] == 1;
     }
 
-    public static bool IsKeyUp(Keyboard.Key key)
+    public bool IsKeyUp(Keyboard.Key key)
     {
         return KeysState[(int)key] == -1;
     }

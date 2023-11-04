@@ -1,4 +1,5 @@
-﻿using Framp.InputSystem;
+﻿using Framp.DI;
+using Framp.InputSystem;
 using Framp.Windows;
 using SFML.Graphics;
 using SFML.System;
@@ -10,7 +11,14 @@ public sealed class TestEntity : Entity
 {
     private Vector2f _currentPos;
     private float _currentPosX = 0.1f;
+    private InputService _inputService;
 
+    [Inject]
+    private void Construct(InputService inputService)
+    {
+        _inputService = inputService;
+    }
+    
     public override void OnCreated()
     {
         ComponentsMaster.Add(new Transform(new Vector2f(0, 0), new Vector2f(1, 1)));
@@ -41,7 +49,7 @@ public sealed class TestEntity : Entity
             _currentPos.Y = 200;
         }
 
-        if (InputService.IsKeyUp(Keyboard.Key.Space))
+        if (_inputService.IsKeyUp(Keyboard.Key.Space))
             _currentPosX *= -1;
         
         ComponentsMaster.Get<Transform>().Move(_currentPos);
