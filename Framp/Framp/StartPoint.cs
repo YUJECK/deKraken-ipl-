@@ -20,8 +20,8 @@ namespace Framp
 
             EntityMaster.SetContainer(registryService);
 
-            EntityMaster.AddEntity(new TestEntity());
-            EntityMaster.AddEntity(new StaticSprite());
+            EntityMaster.SpawnEntity(new TestEntity());
+            EntityMaster.SpawnEntity(new StaticSprite());
             
             gameLoop.StartLoop();
         }

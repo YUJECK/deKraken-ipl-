@@ -14,10 +14,12 @@ public static class EntityMaster
         _registryService = registryService;
     }
     
-    public static void AddEntity(Entity entity)
+    public static void SpawnEntity(Entity entity)
     {
         if (entity == null)
+        {
             Console.WriteLine("! You tried to spawn null entity");
+        }
 
         Entities.Add(entity);
         _registryService.Inject(entity);
@@ -30,7 +32,9 @@ public static class EntityMaster
     public static void DestroyEntity(Entity entity)
     {
         if (entity == null)
-            throw new NullReferenceException("Null entity removed");
+        {
+            Console.WriteLine("! You tried to destroy null entity");
+        }
         
         Entities.Remove(entity);
         entity.OnDestroyed();
