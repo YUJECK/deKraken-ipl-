@@ -20,12 +20,19 @@ public class GameLoop
         _tickableManagers.Add(_renderManager);
     }
     
-    public void StartLoop()
+    public void StartLoop(Action OnGameLoopStarted)
     {
         if (loopStarted)
             return;
         
+        GameLoopLogic(OnGameLoopStarted);
+    }
+
+    private void GameLoopLogic(Action OnGameLoopStarted)
+    {
         loopStarted = true;
+        
+        OnGameLoopStarted?.Invoke();
         
         while (_renderManager.IsOpen)
         {

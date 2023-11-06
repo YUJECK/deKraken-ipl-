@@ -18,6 +18,8 @@ public class RenderManager : ITickable
         RenderWindow = new RenderWindow(VideoMode.DesktopMode, "Framp");
         RenderWindow.Size = new Vector2u(1000, 600);
         
+        SetCamera(new Camera());
+        
         windowWrapper.SetRenderWindow(RenderWindow);
         EntityMaster.OnAdded += OnEntityAdded;
     }

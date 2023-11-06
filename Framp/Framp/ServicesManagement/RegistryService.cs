@@ -29,6 +29,25 @@ public class RegistryService : ITickable
         
         EntityMaster.SetContainer(_injector);
     }
+
+    public void UnregisterService<TService>()
+    {
+        if (_allServices.ContainsKey(typeof(TService)) == null)
+        {
+            Console.WriteLine("You tried to register null service");
+            return;
+        }
+
+        var service = _allServices[typeof(TService)];
+        _allServices.Remove(typeof(TService));
+        
+        if(service is ITickable tickableService)
+            _tickableServices.Remove(tickableService);
+
+        _injector = new(this);
+        
+        EntityMaster.SetContainer(_injector);
+    }
     
     public object Get(Type type)
     {

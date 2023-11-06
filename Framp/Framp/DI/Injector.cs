@@ -38,6 +38,19 @@ public class Injector
                 }
             }
         }
+        
+        var allFields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        
+        foreach (var info in allFields)
+        {
+            foreach (var attribute in info.GetCustomAttributes())
+            {
+                if (attribute is InjectAttribute)
+                {
+                    info.SetValue(toInject, _registryService.Get(info.FieldType));
+                }
+            }
+        }
     }
 
 }

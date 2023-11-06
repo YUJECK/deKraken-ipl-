@@ -11,14 +11,11 @@ public sealed class TestEntity : Entity
 {
     private Vector2f _currentPos;
     private float _currentPosX = 0.1f;
-    private InputService _inputService;
-
-    [Inject]
+    [Inject] private InputService _inputService;
+    
     private void Construct(InputService inputService)
     {
         _inputService = inputService;
-
-        ComponentsMaster.FindByBaseClass<IToDraw>();
     }
     
     public override void OnCreated()
