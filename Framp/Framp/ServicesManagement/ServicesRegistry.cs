@@ -5,13 +5,20 @@ using Framp.InputSystem;
 
 namespace Framp.Infrastructure.ServicesManagement;
 
-public class RegistryService : ITickable
+public class ServicesRegistry : ITickable
 {
     private readonly Dictionary<Type, object> _allServices = new();
     private readonly List<ITickable> _tickableServices = new();
 
     private Injector _injector;
-    
+
+    public ServicesRegistry()
+    {
+        RegisterService<ServicesRegistry>(this);
+        _tickableServices.Remove(this);
+        RegisterService<Injector>(_injector);
+    }
+
     public void RegisterService<TService>(TService service)
     {
         if (service == null)

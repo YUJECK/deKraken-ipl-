@@ -6,7 +6,7 @@ public class GameStartPoint
 {
     private void OnStart()
     {
-        EntityMaster.SpawnEntity(new TestEntity());
+        EntityMaster.SpawnEntity(new PlayerEntity());
         EntityMaster.SpawnEntity(new StaticSprite());
     }
 }

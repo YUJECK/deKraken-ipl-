@@ -22,18 +22,22 @@ public sealed class SpriteRenderer : Component, IToDraw
         _texture = texture;
         _sprite.Texture = _texture;
     }
+    public void ChangeColor(Color color)
+    {
+        _sprite.Color = color;
+    }
 
     protected override void OnStart()
     {
-        _transform = Entity.ComponentsMaster.Get<Transform>();
+        _transform = Entity.Components.Get<Transform>();
         
         _sprite = new Sprite(_texture);
     }
 
     protected override void OnUpdate()
     {
-        _sprite.Scale = _transform.Transformable.Scale;
-        _sprite.Rotation = _transform.Transformable.Rotation;
-        _sprite.Position = _transform.Transformable.Position;
+        _sprite.Scale = _transform.Scale;
+        _sprite.Rotation = _transform.Rotation;
+        _sprite.Position = _transform.Position;
     }
 }

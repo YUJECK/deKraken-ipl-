@@ -1,12 +1,14 @@
-﻿namespace Framp;
+﻿using Framp.DI;
+
+namespace Framp;
 
 public abstract class Entity
 {
-    public readonly ComponentsMaster ComponentsMaster;
+    public readonly ComponentsMaster Components;
 
     public Entity()
     {
-        ComponentsMaster = new ComponentsMaster(this);
+        Components = new ComponentsMaster(this);
     }
 
     public virtual void OnCreated()

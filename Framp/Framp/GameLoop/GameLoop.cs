@@ -1,3 +1,4 @@
+using Framp.Infrastructure.ServicesManagement;
 using Framp.InputSystem;
 using Framp.Windows;
 
@@ -5,19 +6,15 @@ namespace Framp;
 
 public class GameLoop
 {
-    private readonly List<ITickable> _tickableManagers = new();
-    
-    private readonly RenderManager _renderManager;
-    private readonly WindowWrapper windowWrapper = new();
+    private readonly WindowWrapper _windowWrapper = new();
 
     private bool loopStarted = false;
+    private readonly ServicesRegistry _servicesRegistry;
 
-    public GameLoop(params ITickable[] tickableManagers)
+    public GameLoop(ServicesRegistry servicesRegistry)
     {
-        _tickableManagers.AddRange(tickableManagers);
-
-        _renderManager = new RenderManager(windowWrapper);
-        _tickableManagers.Add(_renderManager);
+        _servicesRegistry = servicesRegistry;
+        _servicesRegistry.RegisterService(new RenderManager(_windowWrapper));
     }
     
     public void StartLoop(Action OnGameLoopStarted)
@@ -34,16 +31,15 @@ public class GameLoop
         
         OnGameLoopStarted?.Invoke();
         
-        while (_renderManager.IsOpen)
+        while (_windowWrapper.IsOpen)
         {
-            windowWrapper.Clear();
+            _windowWrapper.Clear();
             
-            _tickableManagers
-                .ForEach((tickable) => tickable.Tick());
+            _servicesRegistry.Tick();
             
             EntityMaster.UpdateEntities();
             
-            windowWrapper.Display();
+            _windowWrapper.Display();
         }
     }
 }

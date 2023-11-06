@@ -1,10 +1,13 @@
-﻿namespace Framp;
+﻿using Framp.DI;
+
+namespace Framp;
 
 public sealed class ComponentsMaster
 {
     public readonly Entity Owner;
     
     private readonly Dictionary<Type, Component> _components = new();
+    [Inject] private Injector _injector;
 
     public ComponentsMaster(Entity owner)
         => Owner = owner;
@@ -40,6 +43,7 @@ public sealed class ComponentsMaster
             throw new NullReferenceException("Null component tried to add");
         
         _components.Add(typeof(TComponent), component);
+        _injector.Inject(component);
         component.Start(Owner);
     }
 

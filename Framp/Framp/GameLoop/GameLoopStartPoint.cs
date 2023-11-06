@@ -14,10 +14,10 @@ namespace Framp
         private static void Main()
         {
             InputService inputService = new();
-            RegistryService registryService = new();
-            GameLoop gameLoop = new(registryService);
+            ServicesRegistry servicesRegistry = new();
+            GameLoop gameLoop = new(servicesRegistry);
 
-            registryService.RegisterService(inputService);
+            servicesRegistry.RegisterService(inputService);
             
             gameLoop.StartLoop(InvokeGameStartPoint);
         }

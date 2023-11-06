@@ -23,7 +23,9 @@ public static class EntityMaster
         }
 
         Entities.Add(entity);
+        
         _injector.Inject(entity);
+        _injector.Inject(entity.Components);
 
         entity.OnCreated();
         
@@ -46,7 +48,7 @@ public static class EntityMaster
         foreach (var entity in Entities)
         {
             entity.OnUpdate();
-            entity.ComponentsMaster.UpdateAll();
+            entity.Components.UpdateAll();
         }
     }
 }

@@ -5,11 +5,11 @@ namespace Framp.DI;
 
 public class Injector
 {
-    private RegistryService _registryService;
+    private ServicesRegistry _servicesRegistry;
 
-    public Injector(RegistryService registryService)
+    public Injector(ServicesRegistry servicesRegistry)
     {
-        _registryService = registryService;
+        _servicesRegistry = servicesRegistry;
     }
 
 
@@ -29,7 +29,7 @@ public class Injector
                     
                     foreach (var parameter in info.GetParameters())
                     {
-                        parameters.Add(_registryService.Get(parameter.ParameterType));
+                        parameters.Add(_servicesRegistry.Get(parameter.ParameterType));
                     }
 
                     type
@@ -47,7 +47,7 @@ public class Injector
             {
                 if (attribute is InjectAttribute)
                 {
-                    info.SetValue(toInject, _registryService.Get(info.FieldType));
+                    info.SetValue(toInject, _servicesRegistry.Get(info.FieldType));
                 }
             }
         }
