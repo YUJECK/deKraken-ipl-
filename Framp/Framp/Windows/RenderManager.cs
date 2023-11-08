@@ -16,21 +16,30 @@ public class RenderManager : ITickable
 
     public RenderManager(WindowWrapper windowWrapper)
     {
-        RenderWindow = new RenderWindow(VideoMode.DesktopMode, "Framp");
+        RenderWindow = new RenderWindow(VideoMode.DesktopMode, "Framp", Styles.Default);
         
         windowWrapper.SetRenderWindow(RenderWindow);
         EntityMaster.OnAdded += OnEntityAdded;
+        
+        RenderWindow.Resized += OnResize;
     }
 
     public void Tick()
     {
-        RenderWindow.SetView(CurrentCamera.View);
-        Console.WriteLine(CurrentCamera.View.Center);
+        RenderWindow.DispatchEvents();
+        
+        if(CurrentCamera != null)
+            CurrentCamera.ApplyViewToRenderWindow(RenderWindow);
         
         foreach (var toDraw in _toDraws)
         {
             Draw(toDraw.ToDraw);
         }
+    }
+
+    private void OnResize(object? sender, SizeEventArgs e)
+    {
+        CurrentCamera.SetViewSize(e.Width, e.Height);
     }
 
     private void Draw(Drawable drawable)
