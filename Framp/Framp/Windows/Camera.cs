@@ -7,7 +7,8 @@ namespace Framp.Windows;
  public class Camera
  {
      private readonly View View;
-     public float CurrentSize { get; private set; } = 1;
+     public float Size { get; private set; } = 1;
+     public Vector2f Center => View.Center;
 
      public Camera(Vector2f center, float size)
      {
@@ -20,7 +21,7 @@ namespace Framp.Windows;
      
      public void SetCameraSize(float size)
      {
-         if(size == CurrentSize)
+         if(size == Size)
              return;
          
          View.Zoom(-1);

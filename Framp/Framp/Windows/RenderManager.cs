@@ -11,6 +11,7 @@ public class RenderManager : ITickable
     private readonly List<IToDraw> _toDraws = new();
 
     private Camera CurrentCamera;
+    private Camera ToCamera;
     
     public Vector2u WindowSize => RenderWindow.Size;
 
@@ -47,8 +48,24 @@ public class RenderManager : ITickable
         RenderWindow.Draw(drawable);    
     }
 
-    public void SetCamera(Camera camera)
+    public async void SetCamera(Camera camera, float transition = 0f)
     {
+        if (transition > 0 && CurrentCamera != null)
+        {
+            Vector2f startCenter = CurrentCamera.Center;
+            Vector2f endCenter = camera.Center;
+     
+            CurrentCamera = camera;
+            camera.SetCameraPosition(startCenter);
+            
+            while (CurrentCamera.Center != endCenter)
+            {
+                CurrentCamera.SetCameraPosition(Vector2Utilities.MoveTo(CurrentCamera.Center, endCenter, transition));
+                
+                await Task.Delay(10);
+            }
+        }
+        
         CurrentCamera = camera;
     }
 
