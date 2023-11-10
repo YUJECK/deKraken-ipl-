@@ -7,13 +7,14 @@ namespace Framp.Windows;
  public class Camera
  {
      private readonly View View;
-     public float Size { get; private set; } = 1;
+     public float Size { get; private set; }
      public Vector2f Center => View.Center;
+     public Vector2f BaseSize { get; private set; }
 
      public Camera(Vector2f center, float size)
      {
          View = new View(center, new Vector2f(VideoMode.DesktopMode.Width, VideoMode.DesktopMode.Height));
-         View.Zoom(size);
+         SetCameraSize(size);
      }
      
      public void SetCameraPosition(Vector2f position)
@@ -24,7 +25,8 @@ namespace Framp.Windows;
          if(size == Size)
              return;
          
-         View.Zoom(-1);
+         View.Size = new Vector2f(BaseSize.X * size, BaseSize.Y * size);
+         Size = size;
      }
      
      public void ApplyViewToRenderWindow(RenderWindow renderWindow)
@@ -34,6 +36,8 @@ namespace Framp.Windows;
      
      public void SetViewSize(float width, float height)
      {
-         View.Size = new Vector2f(width, height);
+         View.Size = new Vector2f(width * Size, height * Size);
+         BaseSize = new Vector2f(width, height);
+         //SetCameraSize(Size);
      }
  }

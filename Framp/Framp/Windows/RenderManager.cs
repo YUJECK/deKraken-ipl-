@@ -12,6 +12,8 @@ public class RenderManager : ITickable
 
     private Camera CurrentCamera;
     private Camera ToCamera;
+
+    private Task CurrentTransition;
     
     public Vector2u WindowSize => RenderWindow.Size;
 
@@ -28,10 +30,12 @@ public class RenderManager : ITickable
     public void Tick()
     {
         RenderWindow.DispatchEvents();
-        
-        if(CurrentCamera != null)
+
+        if (CurrentCamera != null)
+        {
             CurrentCamera.ApplyViewToRenderWindow(RenderWindow);
-        
+        }
+
         foreach (var toDraw in _toDraws)
         {
             Draw(toDraw.ToDraw);
@@ -52,21 +56,39 @@ public class RenderManager : ITickable
     {
         if (transition > 0 && CurrentCamera != null)
         {
-            Vector2f startCenter = CurrentCamera.Center;
-            Vector2f endCenter = camera.Center;
-     
-            CurrentCamera = camera;
-            camera.SetCameraPosition(startCenter);
+            if (CurrentTransition != null)
+                await CurrentTransition;
             
-            while (CurrentCamera.Center != endCenter)
-            {
-                CurrentCamera.SetCameraPosition(Vector2Utilities.MoveTo(CurrentCamera.Center, endCenter, transition));
-                
-                await Task.Delay(10);
-            }
+            CurrentTransition = Transition(camera, transition);
+        }
+        else
+        {
+            CurrentCamera = camera;    
+        }
+    }
+
+    private async Task Transition(Camera toCamera, float transition)
+    {
+        Vector2f startCenter = CurrentCamera.Center;
+        float startSize = CurrentCamera.Size;
+
+        Camera transitionCamera = new Camera(startCenter, startSize);
+        
+        CurrentCamera = transitionCamera;
+
+        float a = 0.05f;
+        
+        while (CurrentCamera.Center != toCamera.Center)
+        {
+            CurrentCamera.SetCameraSize(Math.Clamp(CurrentCamera.Size + a, 0, toCamera.Size));
+            
+            CurrentCamera.SetCameraPosition(
+                Vector2Utilities.MoveTo(CurrentCamera.Center, toCamera.Center, transition));
+
+            await Task.Delay(10);
         }
         
-        CurrentCamera = camera;
+        CurrentCamera = toCamera;
     }
 
     private void OnEntityAdded(Entity entity)
