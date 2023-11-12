@@ -1,3 +1,4 @@
+using Framp.Cameras;
 using Framp.InputSystem;
 using SFML.Graphics;
 using SFML.System;
@@ -10,41 +11,49 @@ public class RenderManager : ITickable
     private readonly RenderWindow RenderWindow;
     private readonly List<IToDraw> _toDraws = new();
 
-    private Camera CurrentCamera;
-    private Camera ToCamera;
-
-    private Task CurrentTransition;
+    public Camera CurrentCamera { get; private set; }
+    private readonly TransitionsStateMachine _transitionsStateMachine; 
     
     public Vector2u WindowSize => RenderWindow.Size;
 
     public RenderManager(WindowWrapper windowWrapper)
     {
+        _transitionsStateMachine = new TransitionsStateMachine(this);
         RenderWindow = new RenderWindow(VideoMode.DesktopMode, "Framp", Styles.Default);
         
         windowWrapper.SetRenderWindow(RenderWindow);
         EntityMaster.OnAdded += OnEntityAdded;
         
         RenderWindow.Resized += OnResize;
+        RenderWindow.Closed += OnClosed;
     }
 
     public void Tick()
     {
         RenderWindow.DispatchEvents();
-
-        if (CurrentCamera != null)
-        {
-            CurrentCamera.ApplyViewToRenderWindow(RenderWindow);
-        }
-
+        
         foreach (var toDraw in _toDraws)
         {
             Draw(toDraw.ToDraw);
         }
+        
+        if (CurrentCamera != null)
+        {
+            CurrentCamera.ApplyViewToRenderWindow(RenderWindow);
+        }
+    }
+
+    private void OnClosed(object? sender, EventArgs e)
+    {
+        RenderWindow.Close();
     }
 
     private void OnResize(object? sender, SizeEventArgs e)
     {
-        CurrentCamera.SetViewSize(e.Width, e.Height);
+        if (CurrentCamera != null)
+        {
+            CurrentCamera.SetViewSize(e.Width, e.Height);
+        }
     }
 
     private void Draw(Drawable drawable)
@@ -52,43 +61,21 @@ public class RenderManager : ITickable
         RenderWindow.Draw(drawable);    
     }
 
-    public async void SetCamera(Camera camera, float transition = 0f)
+    public void SetCamera(Camera camera)
     {
-        if (transition > 0 && CurrentCamera != null)
-        {
-            if (CurrentTransition != null)
-                await CurrentTransition;
-            
-            CurrentTransition = Transition(camera, transition);
-        }
-        else
-        {
-            CurrentCamera = camera;    
-        }
+        if(camera == null)
+            return;
+        
+        CurrentCamera = camera;    
+        CurrentCamera.SetViewSize(RenderWindow.Size.X, RenderWindow.Size.Y);
     }
 
-    private async Task Transition(Camera toCamera, float transition)
+    public void PushTransition(CameraTransition transition)
     {
-        Vector2f startCenter = CurrentCamera.Center;
-        float startSize = CurrentCamera.Size;
-
-        Camera transitionCamera = new Camera(startCenter, startSize);
-        
-        CurrentCamera = transitionCamera;
-
-        float a = 0.05f;
-        
-        while (CurrentCamera.Center != toCamera.Center)
+        if (transition != null && CurrentCamera != null)
         {
-            CurrentCamera.SetCameraSize(Math.Clamp(CurrentCamera.Size + a, 0, toCamera.Size));
-            
-            CurrentCamera.SetCameraPosition(
-                Vector2Utilities.MoveTo(CurrentCamera.Center, toCamera.Center, transition));
-
-            await Task.Delay(10);
+            _transitionsStateMachine.PushTransition(transition);
         }
-        
-        CurrentCamera = toCamera;
     }
 
     private void OnEntityAdded(Entity entity)

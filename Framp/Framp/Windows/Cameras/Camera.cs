@@ -2,11 +2,12 @@ using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 
-namespace Framp.Windows;
+namespace Framp.Cameras;
  
  public class Camera
  {
      private readonly View View;
+     
      public float Size { get; private set; }
      public Vector2f Center => View.Center;
      public Vector2f BaseSize { get; private set; }
@@ -14,6 +15,8 @@ namespace Framp.Windows;
      public Camera(Vector2f center, float size)
      {
          View = new View(center, new Vector2f(VideoMode.DesktopMode.Width, VideoMode.DesktopMode.Height));
+         
+         BaseSize = new Vector2f(1280, 946);
          SetCameraSize(size);
      }
      
@@ -30,14 +33,13 @@ namespace Framp.Windows;
      }
      
      public void ApplyViewToRenderWindow(RenderWindow renderWindow)
-     {
-        renderWindow.SetView(View);
+     {  
+         renderWindow.SetView(View);
      }
      
      public void SetViewSize(float width, float height)
      {
-         View.Size = new Vector2f(width * Size, height * Size);
          BaseSize = new Vector2f(width, height);
-         //SetCameraSize(Size);
+         View.Size = new Vector2f(BaseSize.X * Size, BaseSize.Y * Size);
      }
  }
