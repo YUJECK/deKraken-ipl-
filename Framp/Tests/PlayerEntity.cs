@@ -14,8 +14,8 @@ public sealed class PlayerEntity : Entity
     
     public override void OnCreated()
     {
-        Components.Add(new Transform(new Vector2f(0, 0), new Vector2f(1, 1)));
-
+        base.OnCreated();
+        
         Texture texture 
             = new(PathsHelper.Assets + "Square.png");
         

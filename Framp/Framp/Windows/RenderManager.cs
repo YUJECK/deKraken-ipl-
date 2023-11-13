@@ -58,6 +58,9 @@ public class RenderManager : ITickable
 
     private void Draw(Drawable drawable)
     {
+        if(drawable == null)
+            return;
+        
         RenderWindow.Draw(drawable);    
     }
 

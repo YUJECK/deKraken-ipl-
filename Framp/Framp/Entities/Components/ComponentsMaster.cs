@@ -36,7 +36,7 @@ public sealed class ComponentsMaster
             component.Value.Update();
     }
     
-    public void Add<TComponent>(TComponent component)
+    public TComponent Add<TComponent>(TComponent component)
         where TComponent : Component
     {
         if (component == null)
@@ -45,6 +45,8 @@ public sealed class ComponentsMaster
         _components.Add(typeof(TComponent), component);
         _injector.Inject(component);
         component.Start(Owner);
+
+        return component;
     }
 
     public void Remove<TComponent>()

@@ -27,7 +27,7 @@ public sealed class TransitionsStateMachine
 
     private void Check()
     {
-        if (_currentTransition == null || _currentTransition.State == WorkState.Completed)
+        if (CanStartNewTransition())
         {
             TryStartTransition();
         }
@@ -40,8 +40,7 @@ public sealed class TransitionsStateMachine
         
         if (_transitionsQueue.TryPeek(out CameraTransition cameraTransition))
         {
-            await cameraTransition.StartTransition(_renderManager.CurrentCamera,
-                _renderManager);
+            await cameraTransition.StartTransition(_renderManager.CurrentCamera, _renderManager);
             
             _currentTransition = null;
             _transitionsQueue.Dequeue();
@@ -49,4 +48,7 @@ public sealed class TransitionsStateMachine
             Check();
         }
     }
+
+    private bool CanStartNewTransition()
+        => _currentTransition == null || _currentTransition.State == WorkState.Completed;
 }

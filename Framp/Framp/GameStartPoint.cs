@@ -6,7 +6,10 @@ public class GameStartPoint
 {
     private void OnStart()
     {
-        EntityMaster.SpawnEntity(new StaticSprite());
-        EntityMaster.SpawnEntity(new PlayerEntity());
+        EntityMaster
+            .SpawnEntity(new StaticSprite());
+        
+        EntityMaster
+            .SpawnEntity(new PlayerEntity());
     }
 }
