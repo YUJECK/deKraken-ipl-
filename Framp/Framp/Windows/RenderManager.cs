@@ -73,11 +73,11 @@ public class RenderManager : ITickable
         CurrentCamera.SetViewSize(RenderWindow.Size.X, RenderWindow.Size.Y);
     }
 
-    public void PushTransition(CameraTransition transition)
+    public async Task PushTransition(CameraTransition transition)
     {
         if (transition != null && CurrentCamera != null)
         {
-            _transitionsStateMachine.PushTransition(transition);
+            await _transitionsStateMachine.PushTransition(transition);
         }
     }
 

@@ -7,6 +7,10 @@ public sealed class BasicCameraTransition : CameraTransition
 {
     private CameraTransition _cameraTransitionImplementation;
 
+    public BasicCameraTransition(Camera toCamera) : base(toCamera)
+    {
+    }
+
     public override async Task StartTransition(Camera currentCamera, RenderManager renderManager)
     {
         State = WorkState.Working;
@@ -30,7 +34,7 @@ public sealed class BasicCameraTransition : CameraTransition
             currentCamera.SetCameraSize(a);
             
             currentCamera.SetCameraPosition(
-                Vector2Utilities.MoveTo(currentCamera.Center, ToCamera.Center, 4));
+                Vector2Utilities.MoveTo(currentCamera.Center, ToCamera.Center, 4+a));
 
             renderManager.SetCamera(currentCamera);
             await Task.Delay(10);
@@ -43,9 +47,5 @@ public sealed class BasicCameraTransition : CameraTransition
     public override void BreakTransition()
     {
         
-    }
-
-    public BasicCameraTransition(Camera toCamera) : base(toCamera)
-    {
     }
 }

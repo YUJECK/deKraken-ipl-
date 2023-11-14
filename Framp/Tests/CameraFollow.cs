@@ -1,5 +1,6 @@
 using Framp.Cameras;
 using Framp.DI;
+using Framp.Events;
 using Framp.InputSystem;
 using Framp.Windows;
 using SFML.System;
@@ -11,6 +12,7 @@ public class CameraFollow : Component
 {
     [Inject] private RenderManager _renderManager;
     [Inject] private InputService _inputService;
+    [Inject] private EventManager _eventManager;
     
     private Camera _camera;
     
@@ -24,8 +26,7 @@ public class CameraFollow : Component
     {
         if (_inputService.IsKeyDown(Keyboard.Key.Z))
         {
-            _camera = new Camera(new Vector2f(-300,-300), 1.2f);
-            _renderManager.PushTransition(new BasicCameraTransition(_camera));
+            _eventManager.PushEvent(new TestEvent());
         }
         
         if (_inputService.IsKeyDown(Keyboard.Key.X))

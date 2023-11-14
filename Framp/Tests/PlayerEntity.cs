@@ -1,17 +1,21 @@
 ﻿using Framp.DI;
+using Framp.Events;
 using Framp.InputSystem;
 using Framp.Windows;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
+using Event = Framp.Events.Event;
 
 namespace Framp.Tests;
 
 public sealed class PlayerEntity : Entity
 {
-    private Vector2f movement;
     [Inject] private InputService _inputService;
+    [Inject] private EventManager _eventManager;
     
+    private Vector2f movement;
+
     public override void OnCreated()
     {
         base.OnCreated();
@@ -23,6 +27,12 @@ public sealed class PlayerEntity : Entity
         Components.Add(new CameraFollow());
         
         Components.Get<SpriteRenderer>().ChangeColor(Color.Blue);
+        _eventManager.SubscribeOnEvent<TestEvent>(OnEvent);
+    }
+
+    private void OnEvent(Event eEvent)
+    {
+        Components.Get<SpriteRenderer>().ChangeColor(Color.White);
     }
 
     public override void OnUpdate()

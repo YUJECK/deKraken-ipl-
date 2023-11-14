@@ -14,26 +14,30 @@ public sealed class TransitionsStateMachine
         _renderManager = renderManager;
     }
 
-    public void PushTransition(CameraTransition cameraTransition)
+    public Task PushTransition(CameraTransition cameraTransition)
     {
         if(cameraTransition == null)
-            return;
+            return null;
         
         _transitionsQueue.Enqueue(cameraTransition);
         
         if(_transitionsQueue.Count == 1)
-            Check();
+            return Check();
+        
+        return null;    
     }
 
-    private void Check()
+    private Task Check()
     {
         if (CanStartNewTransition())
         {
-            TryStartTransition();
+            return TryStartTransition();
         }
+
+        return null;
     }
 
-    private async void TryStartTransition()
+    private async Task TryStartTransition()
     {
         if(_currentTransition != null && _currentTransition.State == WorkState.Working)
             return;
