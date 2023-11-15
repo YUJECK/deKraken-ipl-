@@ -4,7 +4,7 @@ namespace Framp.Tests;
 
 public class TestEvent : Event
 {
-    private int i = 0;
+    public int i = 0;
     
     public override void OnPushed()
     {

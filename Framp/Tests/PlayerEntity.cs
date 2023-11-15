@@ -27,10 +27,11 @@ public sealed class PlayerEntity : Entity
         Components.Add(new CameraFollow());
         
         Components.Get<SpriteRenderer>().ChangeColor(Color.Blue);
-        _eventManager.SubscribeOnEvent<TestEvent>(OnEvent);
+        
+        _eventManager.SubscribeOnEvent<TestEvent>(OnTestEvent);
     }
 
-    private void OnEvent(Event eEvent)
+    private void OnTestEvent(TestEvent eEvent)
     {
         Components.Get<SpriteRenderer>().ChangeColor(Color.White);
     }

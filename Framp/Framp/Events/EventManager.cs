@@ -6,7 +6,7 @@ public sealed class EventManager : ITickable
 {
     private readonly Dictionary<Type, Event> _currentEvents = new();
 
-    private readonly Dictionary<Type, List<Subscriber>> _subscribers = new();
+    private readonly Dictionary<Type, List<SubscriberData>> _subscribers = new();
 
     public void Tick()
     {
@@ -27,22 +27,23 @@ public sealed class EventManager : ITickable
         InvokeSubscribers<TEvent>();
     }
 
-    public Subscriber SubscribeOnEvent<TEvent>(Action<Event> action)
+    public SubscriberData SubscribeOnEvent<TEvent>(Action<TEvent> action)
         where TEvent : Event
     {
-        var subscriber = new Subscriber(typeof(TEvent), action);
+        var eventType = typeof(TEvent);
+        var subscriber = new TypedSubscriberData<TEvent>(action);
 
-        if (_subscribers.TryAdd(typeof(TEvent), new List<Subscriber>() { subscriber }))
+        if (_subscribers.TryAdd(eventType, new List<SubscriberData>() { subscriber }))
             return subscriber;
 
-        _subscribers[typeof(TEvent)].Add(subscriber);
+        _subscribers[eventType].Add(subscriber);
 
         return subscriber;
     }
     
-    public void UnsubscribeOnEvent(Subscriber subscriber)
+    public void UnsubscribeOnEvent(SubscriberData subscriberDataAa)
     {
-        _subscribers.Remove(subscriber.SubscriptionType);
+        _subscribers.Remove(subscriberDataAa.SubscriptionType);
     }
 
     private void InvokeSubscribers<TEvent>()
@@ -55,7 +56,7 @@ public sealed class EventManager : ITickable
 
         foreach (var subscriber in _subscribers[typeof(TEvent)])
         {
-            subscriber.OnEvent?.Invoke(subscriberEvent);
+            subscriber.InvokeSubscription(subscriberEvent);
         }
     }
 
