@@ -19,7 +19,7 @@ public class RenderManager : ITickable
     public RenderManager(WindowWrapper windowWrapper)
     {
         _transitionsStateMachine = new TransitionsStateMachine(this);
-        RenderWindow = new RenderWindow(VideoMode.DesktopMode, "deKrakenProject", Styles.Default);
+        RenderWindow = new RenderWindow(VideoMode.DesktopMode, "deKrakenSource", Styles.Default);
         
         windowWrapper.SetRenderWindow(RenderWindow);
         EntityMaster.OnAdded += OnEntityAdded;

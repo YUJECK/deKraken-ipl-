@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "deKrakenProject", "deKrakenProject\deKrakenProject.csproj", "{020EC340-D7B9-40A4-B1DC-B53A20A8A592}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "deKrakenSource", "deKrakenSource\deKrakenSource.csproj", "{020EC340-D7B9-40A4-B1DC-B53A20A8A592}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
